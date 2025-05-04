@@ -25,16 +25,18 @@ void print1DArray(int[] arr) {
   println();
 }
 
+
 // ##################################################################
 // A simple dictionary containing key value pairs. A dictionary
 // should ideally be able to hold any type of object. However, this
 // is very difficult due to the strong typing of java. Therefore the
-// dictionary will be specified to only hold objects of the type "Action".
+// dictionary will be specified to only hold objects of the type 
+// "Action".
 // ##################################################################
 // 
 class Dictionary {
-  ArrayList dict;
-  ArrayList keys;
+  ArrayList<Action> dict;
+  ArrayList<String> keys;
   int counter = 0;
 
   // CONSTRUCTOR
@@ -58,7 +60,7 @@ class Dictionary {
   // Retrieve the Action corresponding to a certain key. 
   //
   Action getAction(String item) {
-    for (int i = 0; i < dict.length; i++) {
+    for (int i = 0; i < dict.size(); i++) {
       if (keys.get(i) == item) {
         return dict.get(i);
       }
@@ -66,7 +68,6 @@ class Dictionary {
     return null; 
   }
 }
-
 // ##################################################################
 // END OF UTILITIES
 // ##################################################################

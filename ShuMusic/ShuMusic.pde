@@ -10,8 +10,9 @@ import java.util.*;
 
 // CONSTANTS
 //
-static int maxPitch = 48;
-static int minPitch = 32;
+int maxPitch = 48;
+int minPitch = 32;
+int octave = 3;    // Default octave.
 
 // ###################################################################
 // VARIABLES
@@ -19,6 +20,10 @@ static int minPitch = 32;
 // MIDIbus is used to connect the program to a synthesizer.
 //
 MidiBus myBus;
+
+GUI gui;
+
+Theme at;
 
 // Chordrelated Variables
 //
@@ -89,6 +94,10 @@ void setup() {
   //
   myBus = new MidiBus(this, -1, 6);
 
+  at = new Theme();
+
+  gui = new GUI();
+
   // TODO: create a function that initiates patterns:
   // initiatePatterns("patterns.json");
   //
@@ -123,7 +132,7 @@ void draw() {
 
   // Draw the GUI for the settings and workings.
   //
-  drawGUI();
+  gui.drawGUI();
 
   // Calculate the pace of playing. Current interval is based on then
   //
@@ -191,6 +200,12 @@ boolean isCompatible(int from, int to) {
 }
 
 void mousePressed() {
+
+  // Check if any widget is clicked on.
+  //
+  gui.handleClick(mouseX, mouseY);
+
+  //
   for (int i = 0; i < modePatternLabels.length; i++) {
     if (mouseX > 20 + i * 100 && mouseX < 20 + i * 100 + 90 &&
       mouseY > height - 40 && mouseY < height - 10) {
@@ -212,6 +227,7 @@ void mousePressed() {
     randomMode = true;
     selectedModeIndex = -1;
     loopSelectedMode = false;
+    
     regenerateProgressions();
     currentProgIndex = 0;
     chordIndex = 0;
@@ -220,20 +236,12 @@ void mousePressed() {
   }
 }
 
-void regenerateProgressions() {
-  progressionList.clear();// clear everything in progression list
-  if (randomMode) {
-    generateChordProgressions(32, 48, majorScale, modePatterns);
-  } else {
-    int[][] single = { modePatterns[selectedModeIndex] };
-    generateChordProgressions(32, 48, majorScale, single);
-  }
+
+void mouseDragged() {
+  
+  gui.handleDrag(mouseX, mouseY);
 }
 
-void turnOffActiveNotes() {
-  for (int note : activeNotes) {
-    myBus.sendNoteOff(0, note, 100);
-    myBus.sendNoteOff(1, note, 100);
-  }
-  activeNotes.clear();
+void mouseReleased() {
+  gui.handleRelease();
 }

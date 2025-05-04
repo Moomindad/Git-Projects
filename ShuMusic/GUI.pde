@@ -4,13 +4,34 @@
 //
 // This is redrawn in every iteration of the loop
 
-class DrawGUI {
-  
-  // Constructor
-  // 
-  DrawGUI() {
+class GUI {
+
+  Button quitButton;
+  PopupMenu patternButtons;
+  Slider octave;
+
+  // All widgets are stored in the same ArrayList.
+  //
+  ArrayList<Widget> widgets;
+
+  GUI() {
+    widgets = new ArrayList<Widget>();
+
+    this.quitButton = new Button(30, 160, 100, 30, "Quit", false, 'q', new QuitAction());
+    widgets.add(this.quitButton);
     
-    // 
+    
+    this.octave = new Slider(400, 80, 150, "Octave:  ", 1, 8, 3);
+    widgets.add(this.octave);
+  }
+
+  // Constructor
+  //
+  void drawGUI() {
+
+    this.quitButton.display();
+    this.octave.display();
+    //
     for (int i = 0; i < modePatternLabels.length; i++) {
       if (selectedModeIndex == i) {
         fill(0, 200, 100);
@@ -42,4 +63,20 @@ class DrawGUI {
       text("Now Playing: " + midiNoteToName(currentNote) + " (Root: " + midiNoteToName(rootNote) + ")", 90, 90);
     }
   }
+
+  void handleClick(float mx, float my) {
+    for (int i = 0; i < widgets.size(); i++) {
+      widgets.get(i).handleClick(mx, my);
+    }
+  }
+  
+  void handleDrag(float mx, float my) {
+    octave.handleDrag(mx, my);
+  }
+  
+  void handleRelease() {
+    octave.handleRelease();
+  }
+  
+  
 }
